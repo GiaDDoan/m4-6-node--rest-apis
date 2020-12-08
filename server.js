@@ -33,5 +33,23 @@ express()
 
     res.json({ status: 200, data: clientInfo});
   })
+  .post('/clients/newclient', (req, res) => {
+    const newClient = req.body;
+    let sameEmail = false;
+
+    clients.forEach((client) => {
+      if(sameEmail === false){
+        if(client.email == newClient.email){
+          sameEmail = true;
+        }
+      }
+    })
+
+    if(sameEmail === false){
+      clients.push(newClient);
+    }
+    console.log('Is the email the same?',sameEmail);
+    res.status(200).send({ status: 200, data: clients});
+  })
 
   .listen(8000, () => console.log(`Listening on port 8000`));
