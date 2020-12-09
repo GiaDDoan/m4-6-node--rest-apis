@@ -3,7 +3,7 @@ const { clients } = require("../data/clients");
 
 // write your handlers here...
 const handleClients = (req, res) => {
-    res.json({ status: 200, data: clients });
+    res.status(200).json({ status: 200, data: clients });
 };
 
 const handleClientsId = (req, res) => {
