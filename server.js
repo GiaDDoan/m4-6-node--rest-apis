@@ -7,6 +7,9 @@ const morgan = require('morgan');
 const clientsObj = require('./data/clients');
 const clients = clientsObj.clients;
 
+const { handleClients, handleClientsId, handleNewClient, handleDeleteClient } = require('./handlers/clientHandlers');
+
+
 express()
   .use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -22,34 +25,8 @@ express()
   .use(express.urlencoded({ extended: false }))
 
   // endpoints
-  .get('/clients', (req, res) => {
-    // console.log(clientsObj.clients[0].id);
-    // console.log(clients);
-    res.json({ status: 200, data: clients});
-  })
-  .get('/clients/:id', (req, res) => {
-    const clientId = req.params.id;
-    let clientInfo = clients.filter((client) => client.id == clientId);
-
-    res.json({ status: 200, data: clientInfo});
-  })
-  .post('/clients/newclient', (req, res) => {
-    const newClient = req.body;
-    let sameEmail = false;
-
-    clients.forEach((client) => {
-      if(sameEmail === false){
-        if(client.email == newClient.email){
-          sameEmail = true;
-        }
-      }
-    })
-
-    if(sameEmail === false){
-      clients.push(newClient);
-    }
-    console.log('Is the email the same?',sameEmail);
-    res.status(200).send({ status: 200, data: clients});
-  })
-
+  .get('/clients', handleClients)
+  .get('/clients/:id', handleClientsId)
+  .post('/clients/newclient', handleNewClient)
+  .delete('/clients/:id', handleDeleteClient)
   .listen(8000, () => console.log(`Listening on port 8000`));
